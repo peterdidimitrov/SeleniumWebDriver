@@ -7,7 +7,7 @@ using System;
 namespace TestProject1
 {
     [TestFixture]
-    public class TestCalculator
+    public class TestCalculator : IDisposable
     {
         IWebDriver driver;
         IWebElement textBoxFirstNum;
@@ -35,7 +35,13 @@ namespace TestProject1
         [OneTimeTearDown]
         public void TearDown()
         {
-            driver.Quit();
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            driver?.Quit();
+            driver?.Dispose();
         }
 
         public void PerformCalculation(string firstNumber, string operation,

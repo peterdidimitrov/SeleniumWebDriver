@@ -6,9 +6,9 @@ using OpenQA.Selenium.Support.UI;
 namespace TestProject2
 {
     [TestFixture]
-    public class WorkingWithWebTable
+    public class WorkingWithWebTable : IDisposable
     {
-        IWebDriver driver;
+        private IWebDriver driver;
 
         [SetUp]
         public void SetUp()
@@ -36,11 +36,11 @@ namespace TestProject2
             string path = System.IO.Directory.GetCurrentDirectory() + "/productinformation.csv";
 
             // If the file exists in the location, delete it
-                        if (File.Exists(path))
+            if (File.Exists(path))
                 File.Delete(path);
 
             // Traverse through table rows to find the table columns
-               foreach (IWebElement trow in tableRows)
+            foreach (IWebElement trow in tableRows)
             {
                 ReadOnlyCollection<IWebElement> tableCols = trow.FindElements(By.XPath("td"));
                 foreach (IWebElement tcol in tableCols)
@@ -56,8 +56,8 @@ namespace TestProject2
             }
 
             // Verify the file was created and has content
-            Assert.IsTrue(File.Exists(path), "CSV file was not created");
-            Assert.IsTrue(new FileInfo(path).Length > 0, "CSV file is empty");
+            Assert.That(File.Exists(path), Is.True, "CSV file was not created");
+            Assert.That(new FileInfo(path).Length > 0, Is.True, "CSV file is empty");
         }
 
         [TearDown]
@@ -65,6 +65,11 @@ namespace TestProject2
         {
             // Quit the driver
             driver.Quit();
+        }
+
+        public void Dispose()
+        {
+            driver?.Dispose();
         }
     }
 }

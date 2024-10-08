@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace TestProject3
 {
     [TestFixture]
-    public class WorkingWithDropDown
+    public class WorkingWithDropDown : IDisposable
     {
         IWebDriver driver;
 
@@ -81,9 +81,18 @@ namespace TestProject3
                     }
                 }
             }
+        }
 
+        [TearDown]
+        public void TearDown()
+        {
             // Quit the driver
             driver.Quit();
+        }
+
+        public void Dispose()
+        {
+            driver?.Dispose();
         }
     }
 }
